@@ -25,7 +25,9 @@ public static class JsonParser
             case MessageType.ChatroomMsg:
                 return (type, payloadToken.ToObject<ChatMessagePayload>());
             case MessageType.PopulateLobby:
+            case MessageType.DepopulateLobby:
                 return (type, payloadToken.ToObject<LobbyPlayer>());
+
             default:
                 return (type, payloadToken.ToString());
         }
