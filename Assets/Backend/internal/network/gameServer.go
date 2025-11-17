@@ -1,5 +1,9 @@
 package network
 
+import (
+	"time"
+)
+
 type GameServerList map[string]*GameServer
 
 type GameServer struct {
@@ -12,6 +16,20 @@ func (m *Manager) NewGameServer(lobbyName string) *GameServer {
 	}
 	m.Games[lobbyName] = gs
 	return gs
+}
+
+func (gs *GameServer) StartGame() {
+	ticker := time.NewTicker(gameTick)
+	defer ticker.Stop()
+
+	go func() {
+		for range ticker.C { // <- stalno čeka tick i izvršava update
+			// Ovdje ide tvoja logika:
+			// npr. update player positions, collision, broadcast...
+
+		}
+	}()
+
 }
 
 /*
