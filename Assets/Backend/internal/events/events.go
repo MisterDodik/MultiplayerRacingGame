@@ -10,10 +10,14 @@ type Event struct {
 }
 
 var (
-	JoinLobby          = "join_lobby"
-	PopulateLobby      = "populate_lobby"
-	DepopulateLobby    = "depopulate_lobby"
-	StartGame          = "start_game"
-	ChatroomMsg        = "chatroom_msg"
 	BroadcastToClients = "server_msg"
+
+	JoinLobby       = "join_lobby"
+	PopulateLobby   = "populate_lobby"
+	DepopulateLobby = "depopulate_lobby"
+
+	ChatroomMsg = "chatroom_msg"
+
+	StartGame      = "start_game"
+	UpdatePosition = "update_position"
 )

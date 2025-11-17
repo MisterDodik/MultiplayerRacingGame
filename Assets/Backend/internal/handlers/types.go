@@ -8,6 +8,7 @@ import (
 var EventHandlers = map[string]func(events.Event, *network.Client) error{
 	events.JoinLobby:       JoinLobbyHandler,
 	events.DepopulateLobby: LeftLobbyHandler,
-	events.StartGame:       StartGameHandler,
 	events.ChatroomMsg:     ChatMsgFromClientHandler,
+	events.StartGame:       StartGameHandler,
+	events.UpdatePosition:  UpdatePositionHandler,
 }
