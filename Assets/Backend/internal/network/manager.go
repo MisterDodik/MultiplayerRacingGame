@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/MisterDodik/MultiplayerGame/internal/events"
 	"github.com/gorilla/websocket"
@@ -26,6 +27,10 @@ type Manager struct {
 	Otps   RetentionMap
 	sync.RWMutex
 }
+
+var (
+	gameTick = 10 * time.Millisecond
+)
 
 func NewManager() *Manager {
 	m := &Manager{
@@ -152,6 +157,11 @@ func (m *Manager) ServeWS(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := m.parseEvent(evt, client); err != nil {
 		m.removeClient(client)
+	}
+
+	//ukloni ovo
+	if err := m.parseEvent(events.Event{Type: events.StartGame, Payload: json.RawMessage{}}, client); err != nil {
+		log.Println(err)
 	}
 }
 
