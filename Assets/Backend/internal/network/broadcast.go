@@ -14,7 +14,9 @@ func BroadcastMessageToAllClients(c *Client, e *events.Event) {
 		return
 	}
 
-	log.Println(string(sendEventJSON))
+	if e.Type != events.UpdatePositionFromServer {
+		log.Println(string(sendEventJSON))
+	}
 	for client := range c.Lobby.Clients {
 		if client.LobbyName == c.LobbyName {
 			client.Egress <- sendEventJSON
