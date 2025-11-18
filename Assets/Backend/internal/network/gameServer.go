@@ -11,12 +11,14 @@ import (
 type GameServerList map[string]*GameServer
 
 type GameServer struct {
-	Clients ClientList
+	Clients   ClientList
+	IsStarted bool
 }
 
 func (m *Manager) NewGameServer(lobbyName string) *GameServer {
 	gs := &GameServer{
-		Clients: make(ClientList),
+		IsStarted: false,
+		Clients:   make(ClientList),
 	}
 	m.Games[lobbyName] = gs
 	return gs
@@ -33,6 +35,7 @@ func (gs *GameServer) StartGame(c *Client) {
 		}
 
 		if len(gs.Clients) == 0 {
+			gs.IsStarted = false
 			return
 		}
 	}
