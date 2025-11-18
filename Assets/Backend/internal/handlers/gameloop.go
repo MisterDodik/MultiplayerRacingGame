@@ -14,7 +14,7 @@ type PositionUpdatePayload struct {
 }
 
 func UpdatePositionHandler(e events.Event, c *network.Client) error {
-	if !c.GameStarted {
+	if !c.Lobby.IsStarted {
 		return nil
 	}
 	var payload PositionUpdatePayload

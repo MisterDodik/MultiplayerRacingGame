@@ -14,6 +14,7 @@ func StartGameHandler(e events.Event, c *network.Client) error {
 		return errors.New("client is not in a lobby")
 	}
 	c.GameStarted = true
+	c.Lobby.IsStarted = true
 	log.Println("game started")
 	go c.Lobby.StartGame(c)
 
