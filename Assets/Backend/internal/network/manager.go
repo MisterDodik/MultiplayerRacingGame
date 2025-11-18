@@ -29,7 +29,7 @@ type Manager struct {
 }
 
 var (
-	gameTick = 10 * time.Millisecond
+	gameTickRate = 50 * time.Millisecond
 )
 
 func NewManager() *Manager {
