@@ -23,16 +23,19 @@ func (m *Manager) NewGameServer(lobbyName string) *GameServer {
 }
 
 func (gs *GameServer) StartGame(c *Client) {
+	log.Println("game loop started")
 	ticker := time.NewTicker(gameTickRate)
 	defer ticker.Stop()
 
-	go func() {
-		for range ticker.C {
-			if err := gs.updatePlayerPositions(c); err != nil {
-				log.Printf("error sending position update: %v", err)
-			}
+	for range ticker.C {
+		if err := gs.updatePlayerPositions(c); err != nil {
+			log.Printf("error sending position update: %v", err)
 		}
-	}()
+
+		if len(gs.Clients) == 0 {
+			return
+		}
+	}
 
 }
 
@@ -61,9 +64,8 @@ func (gs *GameServer) updatePlayerPositions(c *Client) error {
 		Type:    events.UpdatePositionFromServer,
 		Payload: jsonData,
 	}
-	log.Println(string(jsonData))
 
 	BroadcastMessageToAllClients(c, &evt)
-
+	//log.Println(string(evt.Payload))/
 	return nil
 }

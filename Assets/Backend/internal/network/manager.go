@@ -29,7 +29,9 @@ type Manager struct {
 }
 
 var (
-	gameTickRate = 50 * time.Millisecond
+	gameTickRate         = 50 * time.Millisecond
+	startPositionOriginX = 4
+	startPositionOriginY = 0
 )
 
 func NewManager() *Manager {
@@ -159,10 +161,10 @@ func (m *Manager) ServeWS(w http.ResponseWriter, r *http.Request) {
 		m.removeClient(client)
 	}
 
-	//ukloni ovo
-	if err := m.parseEvent(events.Event{Type: events.StartGame, Payload: json.RawMessage{}}, client); err != nil {
-		log.Println(err)
-	}
+	// //ukloni ovo
+	// if err := m.parseEvent(events.Event{Type: events.StartGame, Payload: json.RawMessage{}}, client); err != nil {
+	// 	log.Println(err)
+	// }
 }
 
 func (m *Manager) addClient(lobbyName string, client *Client) {
