@@ -18,6 +18,7 @@ var (
 
 	ChatroomMsg = "chatroom_msg"
 
-	StartGame      = "start_game"
-	UpdatePosition = "update_position"
+	StartGame                = "start_game"
+	UpdatePositionFromClient = "update_position_from_client"
+	UpdatePositionFromServer = "update_position_from_server"
 )
