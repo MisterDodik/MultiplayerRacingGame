@@ -24,8 +24,11 @@ type Client struct {
 }
 
 type ClientGameData struct {
-	PosX float64
-	PosY float64
+	PosX      float64
+	PosY      float64
+	RotationZ float64
+	Radius    float64
+	Speed     float64
 }
 
 func NewClientGameData() *ClientGameData {
