@@ -21,6 +21,7 @@ type Client struct {
 
 	Lobby          *GameServer
 	ClientGameData *ClientGameData
+	GameStarted    bool
 }
 
 type ClientGameData struct {
@@ -31,28 +32,33 @@ type ClientGameData struct {
 	Speed     float64
 }
 
-func NewClientGameData() *ClientGameData {
-	return &ClientGameData{
-		PosX:      0,
-		PosY:      0,
+func (c *Client) NewClientGameData() *ClientGameData {
+	data := &ClientGameData{
 		RotationZ: 0,
-		Radius:    .5,
-		Speed:     10,
+		Radius:    .05,
+		Speed:     .05,
 	}
+
+	data.PosX = float64(startPositionOriginX) + float64(len(c.Lobby.Clients)%4)*0.5
+	data.PosY = float64(startPositionOriginY) - float64(len(c.Lobby.Clients)/4)*0.5
+	log.Println(data.PosX, data.PosY)
+	return data
 }
 
 func NewClient(conn *websocket.Conn, manager *Manager, username, lobbyName, id string, lobby *GameServer) *Client {
-	return &Client{
+	c := &Client{
 		Manager:   manager,
 		Conn:      conn,
 		Egress:    make(chan []byte),
 		LobbyName: lobbyName,
 		Username:  username,
 
-		Id:             id,
-		Lobby:          lobby,
-		ClientGameData: NewClientGameData(),
+		Id:          id,
+		Lobby:       lobby,
+		GameStarted: false,
 	}
+	c.ClientGameData = c.NewClientGameData()
+	return c
 }
 
 func (c *Client) ReadMessage() {
