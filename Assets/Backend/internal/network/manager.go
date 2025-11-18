@@ -80,6 +80,12 @@ func (m *Manager) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if _, ok := m.Games[payload.Seed]; ok { //otherwise the desired gameserver is empty (non existent)
+		if m.Games[payload.Seed].IsStarted {
+			w.WriteHeader(http.StatusUnauthorized)
+			_, _ = w.Write([]byte("game already started"))
+			return
+		}
+
 		count := 0
 		for c := range m.Games[payload.Seed].Clients {
 			if c.LobbyName == payload.Seed {
