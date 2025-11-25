@@ -9,7 +9,6 @@ import (
 )
 
 func StartGameHandler(e events.Event, c *network.Client) error {
-
 	if c.Lobby == nil {
 		return errors.New("client is not in a lobby")
 	}
