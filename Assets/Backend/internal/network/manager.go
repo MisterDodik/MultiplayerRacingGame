@@ -3,7 +3,9 @@ package network
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
+	"math/rand/v2"
 	"net/http"
 	"sync"
 	"time"
@@ -150,7 +152,9 @@ func (m *Manager) ServeWS(w http.ResponseWriter, r *http.Request) {
 		lobby = val
 	}
 
-	client := NewClient(conn, m, userName, lobbyName, otp, lobby)
+	R, G, B := rand.IntN(255), rand.IntN(255), rand.IntN(255)
+	newColor := fmt.Sprintf("#%02X%02X%02X", R, G, B)
+	client := NewClient(conn, m, userName, lobbyName, otp, lobby, newColor)
 
 	m.addClient(lobbyName, client)
 
@@ -167,10 +171,6 @@ func (m *Manager) ServeWS(w http.ResponseWriter, r *http.Request) {
 		m.removeClient(client)
 	}
 
-	// //ukloni ovo
-	// if err := m.parseEvent(events.Event{Type: events.StartGame, Payload: json.RawMessage{}}, client); err != nil {
-	// 	log.Println(err)
-	// }
 }
 
 func (m *Manager) addClient(lobbyName string, client *Client) {
