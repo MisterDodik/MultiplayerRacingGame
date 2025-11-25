@@ -22,6 +22,7 @@ type Client struct {
 	Lobby          *GameServer
 	ClientGameData *ClientGameData
 	GameStarted    bool
+	Color          string
 }
 
 type ClientGameData struct {
@@ -45,7 +46,7 @@ func (c *Client) NewClientGameData() *ClientGameData {
 	return data
 }
 
-func NewClient(conn *websocket.Conn, manager *Manager, username, lobbyName, id string, lobby *GameServer) *Client {
+func NewClient(conn *websocket.Conn, manager *Manager, username, lobbyName, id string, lobby *GameServer, color string) *Client {
 	c := &Client{
 		Manager:   manager,
 		Conn:      conn,
@@ -56,6 +57,7 @@ func NewClient(conn *websocket.Conn, manager *Manager, username, lobbyName, id s
 		Id:          id,
 		Lobby:       lobby,
 		GameStarted: false,
+		Color:       color,
 	}
 	c.ClientGameData = c.NewClientGameData()
 	return c
