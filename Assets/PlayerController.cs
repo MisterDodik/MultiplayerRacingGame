@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private float rotationEventDelay = 0.2f;
+    private float currentRotationTimer = 0;
+
+
     public bool GameStarted { get; private set; }
 
     private PlayerLobby playerManager;
@@ -19,7 +23,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (!GameStarted)
             return;
@@ -39,7 +43,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    //private void Update()
+    //{
+        //if (currentRotationTimer < rotationEventDelay)
+        //{
+        //    currentRotationTimer += Time.deltaTime;
+        //}
+        //else
+        //{
+        //    EventSystem.Emit(MessageType.SendNetworkMessage, new NetworkMessage
+        //    {
+        //        type = MessageType.UpdatePositionFromClient,
+        //        payload = (new RotationUpdateClient
+        //        {
+        //            rotationZ = transform.localRotation.z
+        //        })
+        //    });
+        //    currentRotationTimer = 0;
+        //}
+    //}
 
     private void UpdatePositionsHandler(object o)
     {
@@ -75,4 +97,10 @@ public class PositionUpdateClient
 {
     public float inputX;
     public float inputY;
+}
+
+[System.Serializable]
+public class RotationUpdateClient
+{
+    public float rotationZ;
 }

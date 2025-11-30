@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private SpriteRenderer playerModel;
+
     private string Username { get; set; }
     public string Id {get; private set; }
 
     private bool gameStarted = false;
 
     private Vector2 targetPosition;
+
+    private float rotationSpeed = 5;
     //private bool isOtherPlayer = false;
     public void InitPlayer(string username, string id, bool _isOtherPlayer, PlayerLobby _playerManager, string colorHex)
     {
@@ -19,13 +24,14 @@ public class Player : MonoBehaviour
         Id = id;
 
 	    Color newColor;
-	    if (ColorUtility.TryParseHtmlString(colorHex, out newColor))
+	    if (ColorUtility.TryParseHtmlString(colorHex, out newColor) && playerModel!=null)
 	    {
-		    GetComponent<SpriteRenderer>().color = newColor;
+            playerModel.color = newColor;
 	    }
-	
+
+        targetPosition = transform.localPosition;
         //playerManager = _playerManager;
-       // isOtherPlayer = _isOtherPlayer;
+        // isOtherPlayer = _isOtherPlayer;
     }
     public void SpawnInGame()
     {
@@ -43,6 +49,11 @@ public class Player : MonoBehaviour
             targetPosition,
             Time.deltaTime * 10f
         );
+
+        Vector2 direction = (targetPosition - (Vector2)transform.localPosition).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, direction);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, Time.deltaTime * rotationSpeed);
+       // transform.localRotation = Quaternion.Euler(0, 0, targetRotation.eulerAngles.z);
     }
     public void SetTargetPosition(Vector2 pos)
     {
