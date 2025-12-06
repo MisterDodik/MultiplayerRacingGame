@@ -9,8 +9,8 @@ import (
 )
 
 type PositionUpdatePayload struct {
-	InputX float64 `json:"inputX"`
-	InputY float64 `json:"inputY"`
+	InputX float32 `json:"inputX"`
+	InputY float32 `json:"inputY"`
 }
 
 func UpdatePositionHandler(e events.Event, c *network.Client) error {
@@ -25,8 +25,8 @@ func UpdatePositionHandler(e events.Event, c *network.Client) error {
 	return nil
 }
 
-func calculate_pos(c *network.Client, inputX, inputY float64) {
-	if math.Abs(inputX) > 0 && math.Abs(inputY) > 0 {
+func calculate_pos(c *network.Client, inputX, inputY float32) {
+	if math.Abs(float64(inputX)) > 0 && math.Abs(float64(inputY)) > 0 {
 		inputX /= math.Sqrt2
 		inputY /= math.Sqrt2
 	}
@@ -53,21 +53,47 @@ func calculate_pos(c *network.Client, inputX, inputY float64) {
 	}
 }
 
-func collides(c *network.Client, x, y float64) bool {
-	for p := range c.Lobby.Clients {
-		if p == c {
+func collides(c *network.Client, potentialX, potentialY float32) bool {
+
+	//collision with other players
+	for player := range c.Lobby.Clients {
+		if player == c {
 			continue
 		}
 
-		dx := x - p.ClientGameData.PosX
-		dy := y - p.ClientGameData.PosY
+		if player.ClientGameData.PosX+player.ClientGameData.Width/2 <= potentialX {
+			return true
+		}
+		if player.ClientGameData.PosY+player.ClientGameData.Height/2 <= potentialY {
+			return true
+		}
 
-		dist := math.Sqrt(dx*dx + dy*dy)
+		overlapX := partialAABB(player.ClientGameData.PosX, player.ClientGameData.Width/2, potentialX, c.ClientGameData.Width/2)
+		overlapY := partialAABB(player.ClientGameData.PosY, player.ClientGameData.Height/2, potentialY, c.ClientGameData.Height/2)
 
-		if dist < c.ClientGameData.Radius+p.ClientGameData.Radius {
+		if overlapX && overlapY {
 			return true
 		}
 	}
 
+	for _, col := range c.Manager.Games[c.LobbyName].Grid {
+		for _, item := range col {
+			if !item.HasObstacle {
+				continue
+			}
+
+			overlapX := partialAABB(item.CenterX, c.Manager.Games[c.LobbyName].GridCellSize/2, potentialX, c.ClientGameData.Width/2)
+			overlapY := partialAABB(item.CenterY, c.Manager.Games[c.LobbyName].GridCellSize/2, potentialY, c.ClientGameData.Height/2)
+
+			if overlapX && overlapY {
+				return true
+			}
+		}
+	}
+
 	return false
+}
+func partialAABB(ax, ad, bx, bd float32) bool {
+	return ax+ad >= bx-bd && //nacrtaj sliku kad ne bude jasno :)
+		bx+bd >= ax-ad
 }
