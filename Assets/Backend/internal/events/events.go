@@ -18,7 +18,11 @@ var (
 
 	ChatroomMsg = "chatroom_msg"
 
-	StartGame                = "start_game"
+	StartGame     = "start_game"
+	SpawnObstacle = "spawn_grid_obstacle"
+
 	UpdatePositionFromClient = "update_position_from_client"
 	UpdatePositionFromServer = "update_position_from_server"
+
+	EndGame = "end_game"
 )
