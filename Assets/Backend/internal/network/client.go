@@ -26,22 +26,22 @@ type Client struct {
 }
 
 type ClientGameData struct {
-	PosX      float64
-	PosY      float64
-	RotationZ float64
-	Radius    float64
-	Speed     float64
+	PosX   float32
+	PosY   float32
+	Width  float32
+	Height float32
+	Speed  float32
 }
 
 func (c *Client) NewClientGameData() *ClientGameData {
 	data := &ClientGameData{
-		RotationZ: 0,
-		Radius:    .12,
-		Speed:     .03,
+		Width:  .3,
+		Height: .3,
+		Speed:  .03,
 	}
 
-	data.PosX = float64(startPositionOriginX) + float64(len(c.Lobby.Clients)%4)*0.5
-	data.PosY = float64(startPositionOriginY) - float64(len(c.Lobby.Clients)/4)*0.5
+	data.PosX = float32(startPositionOriginX) + float32(len(c.Lobby.Clients)%4)*0.5
+	data.PosY = float32(startPositionOriginY) - float32(len(c.Lobby.Clients)/4)*0.5
 	log.Println(data.PosX, data.PosY)
 	return data
 }
@@ -61,6 +61,10 @@ func NewClient(conn *websocket.Conn, manager *Manager, username, lobbyName, id s
 	}
 	c.ClientGameData = c.NewClientGameData()
 	return c
+}
+func (c *Client) SetPosition(posX, posY float32) {
+	c.ClientGameData.PosX = posX
+	c.ClientGameData.PosY = posY
 }
 
 func (c *Client) ReadMessage() {
