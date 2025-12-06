@@ -16,7 +16,11 @@ public static class MessageType
 
     public const string StartGame = "start_game";
     public const string UpdatePositionFromClient = "update_position_from_client";
+    public const string UpdateRotationFromClient = "update_rotation_from_client";
+
     public const string UpdatePositionFromServer = "update_position_from_server";
+
+    public const string SpawnObstacle = "spawn_grid_obstacle";
 
 }
 
