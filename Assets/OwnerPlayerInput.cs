@@ -9,14 +9,21 @@ public class OwnerPlayerInput : MonoBehaviour
 
     private PlayerLobby playerManager;
 
-    public void StartGame(PlayerLobby _playerManager)
+    private Transform mainCamera;
+    public void StartGame(PlayerLobby _playerManager, Transform _camera)
     {
         GameStarted = true;
         playerManager = _playerManager;
+        
+        mainCamera = _camera;
+        mainCamera.parent = transform;
+        mainCamera.localPosition = new Vector3(0, 0, -10);
     }
     public void EndGame()
     {
         GameStarted = false;
+        mainCamera.parent = null;
+        mainCamera.localPosition = new Vector3(0, 0, -10);
     }
 
 
@@ -47,34 +54,28 @@ public class OwnerPlayerInput : MonoBehaviour
             playerManager.players[item.id].SetTargetPosition(new Vector2(item.x, item.y));
         }
     }
+    private void UpdateClientColor(object o)
+    {
+        UpdateColor data = o as UpdateColor;
+        Color newColor;
+
+        if (ColorUtility.TryParseHtmlString(data.colorHex, out newColor))
+        {
+            playerManager.players[data.id].UpdateClientColor(newColor, data.isHunter);
+            return;
+        }
+        print("error parsing updateclientcolor data");
+    }
     private void OnEnable()
     {
+        EventSystem.Subscribe(MessageType.UpdateClientColor, UpdateClientColor);
         EventSystem.Subscribe(MessageType.UpdatePositionFromServer, UpdatePositionsHandler);
     }
     private void OnDisable()
     {
+        EventSystem.Unsubscribe(MessageType.UpdateClientColor, UpdateClientColor);
         EventSystem.Unsubscribe(MessageType.UpdatePositionFromServer, UpdatePositionsHandler);
     }
-
-    //private void Update()
-    //{
-        //if (currentRotationTimer < rotationEventDelay)
-        //{
-        //    currentRotationTimer += Time.deltaTime;
-        //}
-        //else
-        //{
-        //    EventSystem.Emit(MessageType.SendNetworkMessage, new NetworkMessage
-        //    {
-        //        type = MessageType.UpdatePositionFromClient,
-        //        payload = (new RotationUpdateClient
-        //        {
-        //            rotationZ = transform.localRotation.z
-        //        })
-        //    });
-        //    currentRotationTimer = 0;
-        //}
-    //}
 }
 
 
@@ -95,8 +96,11 @@ public class PositionUpdateClient
     public float inputY;
 }
 
+
 [System.Serializable]
-public class RotationUpdateClient
+public class UpdateColor
 {
-    public float rotationZ;
+    public string id;
+    public string colorHex;
+    public bool isHunter;
 }

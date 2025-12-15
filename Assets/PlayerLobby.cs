@@ -20,6 +20,7 @@ public class PlayerLobby : MonoBehaviour
 
     private int playerCount = 0;
 
+    [SerializeField] private Transform mainCamera;
     private void NewInLobby(object playerInfo)
     {
         LobbyPlayer data = playerInfo as LobbyPlayer;
@@ -89,7 +90,7 @@ public class PlayerLobby : MonoBehaviour
             {
                 p.SpawnInGame();
             }
-            realPlayer.StartGame(this);
+            realPlayer.StartGame(this, mainCamera);
         });
     }
     private void OnEnable()
