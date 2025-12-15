@@ -38,22 +38,12 @@ var (
 
 func NewManager() *Manager {
 	m := &Manager{
-		// clients: make(ClientList),
 		Games:  make(GameServerList),
 		Events: make(map[string]func(events.Event, *Client) error),
 		Otps:   NewRetentionMap(),
 	}
-
-	// m.initHandlers()
-
 	return m
 }
-
-// func (m *Manager) initHandlers() {
-// 	m.Events[events.JoinLobby] = handlers.JoinLobbyHandler
-// 	m.Events[events.StartGame] = handlers.StartGameHandler
-// 	m.Events[events.ChatroomMsg] = handlers.ChatMsgFromClientHandler
-// }
 
 func (m *Manager) parseEvent(e events.Event, c *Client) error {
 	event, ok := m.Events[e.Type]
