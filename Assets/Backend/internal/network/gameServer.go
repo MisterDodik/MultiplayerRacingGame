@@ -123,11 +123,14 @@ func (m *Manager) NewGameServer(lobbyName string, gridCols, gridRows int, gridCe
 }
 
 func (gs *GameServer) initializators(c *Client) {
-	if gs.initObstacles(20, c) != nil {
+	if gs.initObstacles(1, c) != nil {
 		log.Println("obstacles didnt spawn correctly")
 	}
 
+	hunterIndex := rand.IntN(len(gs.Clients))
+	counter := 0
 	for client := range gs.Clients {
+		client.SetHunter(hunterIndex == counter) //resets previous and sets new isHunter state
 		for {
 			i := rand.IntN(gs.GridCols)
 			j := rand.IntN(gs.GridRows)
@@ -139,7 +142,9 @@ func (gs *GameServer) initializators(c *Client) {
 				break
 			}
 		}
+		counter++
 	}
+
 }
 func (gs *GameServer) StartGame(c *Client) {
 	log.Println("game loop started")
