@@ -2,6 +2,7 @@ package network
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/MisterDodik/MultiplayerGame/internal/events"
@@ -26,18 +27,36 @@ type Client struct {
 }
 
 type ClientGameData struct {
-	PosX   float32
-	PosY   float32
-	Width  float32
-	Height float32
-	Speed  float32
+	PosX     float32
+	PosY     float32
+	Width    float32
+	Height   float32
+	Speed    float32
+	IsHunter bool
 }
 
+func (c *Client) SetHunter(isHunter bool) {
+	if isHunter {
+		c.Color = "#ff0000ff"
+	} else {
+		c.Color = "#04ff00ff"
+	}
+	c.ClientGameData.IsHunter = isHunter
+
+	evt := &events.Event{
+		Type: events.UpdateColor,
+		Payload: json.RawMessage(
+			[]byte(fmt.Sprintf(`{"id":"%s", "colorHex":"%s", "isHunter": "%v"}`, c.Id, c.Color, c.ClientGameData.IsHunter)),
+		),
+	}
+	BroadcastMessageToAllClients(c, evt)
+}
 func (c *Client) NewClientGameData() *ClientGameData {
 	data := &ClientGameData{
-		Width:  .3,
-		Height: .3,
-		Speed:  .03,
+		Width:    .3,
+		Height:   .3,
+		Speed:    .03,
+		IsHunter: false,
 	}
 
 	data.PosX = float32(startPositionOriginX) + float32(len(c.Lobby.Clients)%4)*0.5

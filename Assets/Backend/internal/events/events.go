@@ -20,6 +20,7 @@ var (
 
 	StartGame     = "start_game"
 	SpawnObstacle = "spawn_grid_obstacle"
+	UpdateColor   = "update_color_from_server"
 
 	UpdatePositionFromClient = "update_position_from_client"
 	UpdatePositionFromServer = "update_position_from_server"
