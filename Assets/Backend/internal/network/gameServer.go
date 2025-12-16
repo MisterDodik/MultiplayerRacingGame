@@ -11,6 +11,8 @@ import (
 
 type GameServerList map[string]*GameServer
 type GameServer struct {
+	Settings *GameSettings
+
 	Clients   ClientList
 	IsStarted bool
 
@@ -20,6 +22,15 @@ type GameServer struct {
 	GridCellSize float32
 	GridOriginX  float32
 	GridOriginY  float32
+}
+type GameSettings struct {
+	HunterAttackRange float64
+}
+
+func (gs *GameServer) NewGameSettings(hunterAttackRange float64) *GameSettings {
+	return &GameSettings{
+		HunterAttackRange: hunterAttackRange,
+	}
 }
 
 type GridData struct {
@@ -116,6 +127,9 @@ func (m *Manager) NewGameServer(lobbyName string, gridCols, gridRows int, gridCe
 		GridOriginX:  gridOriginX,
 		GridOriginY:  gridOriginY,
 	}
+
+	//ovdje stavi mzd da se iz managera salju, al nek zasad ostanu hardcoded vrijednosti
+	gs.Settings = gs.NewGameSettings(0.5)
 	m.Games[lobbyName] = gs
 	gs.initGrid()
 
