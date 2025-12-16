@@ -24,6 +24,7 @@ var (
 
 	UpdatePositionFromClient = "update_position_from_client"
 	UpdatePositionFromServer = "update_position_from_server"
+	HunterAttack             = "hunter_attack"
 
 	EndGame = "end_game"
 )

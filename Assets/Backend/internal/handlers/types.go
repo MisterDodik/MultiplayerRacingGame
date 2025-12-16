@@ -11,6 +11,7 @@ var EventHandlers = map[string]func(events.Event, *network.Client) error{
 	events.ChatroomMsg:              ChatMsgFromClientHandler,
 	events.StartGame:                StartGameHandler,
 	events.UpdatePositionFromClient: UpdatePositionHandler,
+	events.HunterAttack:             HunterAttackHandler,
 
 	//events.EndGame:                EndGameHandler,
 }
