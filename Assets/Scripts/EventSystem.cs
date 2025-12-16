@@ -20,6 +20,7 @@ public static class MessageType
     public const string UpdateRotationFromClient = "update_rotation_from_client";
 
     public const string UpdatePositionFromServer = "update_position_from_server";
+    public const string HunterAttack = "hunter_attack";
 
     public const string SpawnObstacle = "spawn_grid_obstacle";
 
