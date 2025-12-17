@@ -33,6 +33,8 @@ public static class JsonParser
                 return (type, JsonConvert.DeserializeObject<List<PositionUpdateServer>>(payloadToken.ToString()));
             case MessageType.SpawnObstacle:
                 return (type, JsonConvert.DeserializeObject<List<Obstacle>>(payloadToken.ToString()));
+            case MessageType.RemoveObstacle:
+                return (type, payloadToken.ToObject<Obstacle>());
             case MessageType.UpdateClientColor:
                 return (type, payloadToken.ToObject<UpdateColor>());
             default:

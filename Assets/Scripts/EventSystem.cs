@@ -23,6 +23,7 @@ public static class MessageType
     public const string HunterAttack = "hunter_attack";
 
     public const string SpawnObstacle = "spawn_grid_obstacle";
+    public const string RemoveObstacle = "remove_grid_obstacle";
 
 }
 
