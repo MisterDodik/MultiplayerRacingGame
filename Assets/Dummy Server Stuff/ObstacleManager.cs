@@ -36,7 +36,7 @@ public class ObstacleManager : MonoBehaviour
     public void SpawnObstacle(object data)
     {
         var obstacleInfoList = data as List<Obstacle>;
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>{
+        UnityMainThreadDispatcher.Instance().Enqueue(() => {
             foreach (Obstacle item in obstacleInfoList)
             {
                 GameObject obstacle = GetObstacle();
@@ -59,16 +59,23 @@ public class ObstacleManager : MonoBehaviour
         GameObject obstacle;
         if (activeObstacles.TryGetValue(new Vector2(obstacleData.posX, obstacleData.posY), out obstacle))
         {
-            UnityMainThreadDispatcher.Instance().Enqueue(() => { 
+            UnityMainThreadDispatcher.Instance().Enqueue(() => {
                 obstacle.SetActive(false);
             });
         }
     }
-
+    public void RemoveAllObstacles()
+    {
+        foreach(GameObject item in activeObstacles.Values)
+        {
+            item.SetActive(false);  
+        }
+    }
     private void OnEnable()
     {
         EventSystem.Subscribe(MessageType.SpawnObstacle, SpawnObstacle);
         EventSystem.Subscribe(MessageType.RemoveObstacle, RemoveObstacle);
+
     }
     private void OnDisable()
     {
