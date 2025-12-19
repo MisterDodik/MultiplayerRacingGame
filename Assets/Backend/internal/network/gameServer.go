@@ -14,8 +14,9 @@ type GameServerList map[string]*GameServer
 type GameServer struct {
 	Settings *GameSettings
 
-	Clients   ClientList
-	IsStarted bool
+	Clients       ClientList
+	IsStarted     bool
+	ActivePlayers int
 
 	Grid          [][]GridData
 	GridObstacles []IntPair
@@ -48,20 +49,6 @@ func (gs *GameServer) initGrid() {
 	for row := range gs.Grid {
 		gs.Grid[row] = make([]GridData, gs.GridRows)
 	}
-
-	for i := 0; i < gs.GridCols; i++ {
-		for j := 0; j < gs.GridRows; j++ {
-			isEdge := false
-			if i == gs.GridCols-1 || i == 0 || j == 0 || j == gs.GridRows-1 {
-				isEdge = true
-			}
-			gs.Grid[i][j] = GridData{
-				CenterY:     gs.GridOriginY + float32(j)*gs.GridCellSize,
-				CenterX:     gs.GridOriginX + float32(i)*gs.GridCellSize,
-				HasObstacle: isEdge,
-			}
-		}
-	}
 }
 
 type Obstacle struct {
@@ -78,6 +65,20 @@ type IntPair struct {
 func (gs *GameServer) initObstacles(obstacleCoverage int, c *Client) error {
 	if obstacleCoverage == 0 {
 		obstacleCoverage = 20
+	}
+	//reset grid
+	for i := 0; i < gs.GridCols; i++ {
+		for j := 0; j < gs.GridRows; j++ {
+			isEdge := false
+			if i == gs.GridCols-1 || i == 0 || j == 0 || j == gs.GridRows-1 {
+				isEdge = true
+			}
+			gs.Grid[i][j] = GridData{
+				CenterY:     gs.GridOriginY + float32(j)*gs.GridCellSize,
+				CenterX:     gs.GridOriginX + float32(i)*gs.GridCellSize,
+				HasObstacle: isEdge,
+			}
+		}
 	}
 
 	used := make(map[IntPair]struct{})
@@ -152,8 +153,9 @@ func (gs *GameServer) removeObstacle(c *Client) error {
 }
 func (m *Manager) NewGameServer(lobbyName string, gridCols, gridRows int, gridCellSize, gridOriginX, gridOriginY float32) *GameServer {
 	gs := &GameServer{
-		IsStarted: false,
-		Clients:   make(ClientList),
+		IsStarted:     false,
+		Clients:       make(ClientList),
+		ActivePlayers: 0,
 
 		GridCols:     gridCols,
 		GridRows:     gridRows,
@@ -171,6 +173,9 @@ func (m *Manager) NewGameServer(lobbyName string, gridCols, gridRows int, gridCe
 }
 
 func (gs *GameServer) initializators(c *Client) {
+	for player := range gs.Clients {
+		player.SetHunter(false)
+	}
 	if gs.initObstacles(20, c) != nil {
 		log.Println("obstacles didnt spawn correctly")
 	}
@@ -196,7 +201,13 @@ func (gs *GameServer) initializators(c *Client) {
 
 }
 func (gs *GameServer) StartGame(c *Client) {
+	// for player, ok := range gs.Clients {
+	// 	if ok && player.GameStarted {
+	// 		gs.ActivePlayers++
+	// 	}
+	// }
 	log.Println("game loop started")
+	log.Println("number of players in the game: ", gs.ActivePlayers)
 	mainTicker := time.NewTicker(gameTickRate)
 
 	barricadeTicker := time.NewTicker(gs.Settings.BarricadeSpawnRate)
@@ -213,10 +224,15 @@ func (gs *GameServer) StartGame(c *Client) {
 				log.Printf("error sending position update: %v", err)
 			}
 
-			if len(gs.Clients) == 0 { //ovdje mozes vjv staviti i 1, tj ako je samo jedan ostao onda je kraj tj on je pobijedio
+			if len(gs.Clients) == 0 || gs.ActivePlayers == 0 { //ovdje mozes vjv staviti i 1, tj ako je samo jedan ostao onda je kraj tj on je pobijedio
+				log.Println("evo mene pozvao ovo za gasenje servera na neki nacin")
 				defer func() {
 					gs.IsStarted = false
 				}()
+
+				if gs.ActivePlayers == 0 {
+					return
+				}
 
 				var c *Client
 				for key := range gs.Clients { //this retrieves the first ie the only client left in the lobby
