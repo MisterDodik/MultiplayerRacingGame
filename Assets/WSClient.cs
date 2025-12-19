@@ -26,6 +26,7 @@ public class WSClient : MonoBehaviour
         ws.OnClose += (sender, e) =>
         {
             Debug.Log("Connection closed");
+            EventSystem.Emit(MessageType.CloseConnection, null);
         };
 
         ws.Connect();
@@ -34,7 +35,7 @@ public class WSClient : MonoBehaviour
     private void OnMessageReceived(object sender, MessageEventArgs e)
     {
         var (type, payload) = JsonParser.Parse(e.Data);
-        if(type != MessageType.UpdatePositionFromServer)
+        if(type != MessageType.UpdatePositionFromServer && type != MessageType.RemoveObstacle)
             print("received payload with type: " + type);
         EventSystem.Emit(type, payload);
     }
