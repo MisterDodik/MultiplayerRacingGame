@@ -12,7 +12,7 @@ public abstract class PlayerGeneral : MonoBehaviour
     public string Id {get; private set; }
     public bool IsHunter {get; private set; }
 
-    private bool gameStarted = false;
+    protected bool gameStarted = false;
 
     private Vector2 targetPosition;
 
@@ -41,7 +41,10 @@ public abstract class PlayerGeneral : MonoBehaviour
         transform.localScale = new Vector3(0.3f, 0.3f, 1);
         gameStarted = true;
     }
-
+    public void EndGame()
+    {
+        gameStarted = false;
+    }
    
     public virtual void Update()
     {

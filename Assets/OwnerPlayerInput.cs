@@ -19,11 +19,14 @@ public class OwnerPlayerInput : PlayerGeneral
         mainCamera.parent = transform;
         mainCamera.localPosition = new Vector3(0, 0, -10);
     }
-    public void EndGame()
+    public void EndOwnerGame()
     {
         GameStarted = false;
-        mainCamera.parent = null;
-        mainCamera.localPosition = new Vector3(0, 0, -10);
+        if (mainCamera != null)
+        {
+            mainCamera.parent = null;
+            mainCamera.localPosition = new Vector3(0, 0, -10);
+        }
     }
 
 
