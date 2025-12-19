@@ -12,9 +12,16 @@ func StartGameHandler(e events.Event, c *network.Client) error {
 	if c.Lobby == nil {
 		return errors.New("client is not in a lobby")
 	}
-	c.GameStarted = true
-	c.Lobby.IsStarted = true
+	if c.Lobby.IsStarted {
+		return errors.New("reconnection is currently not allowed") //send info to player
+	}
+	c.Lobby.ActivePlayers = len(c.Lobby.Clients)
+
+	for client := range c.Lobby.Clients {
+		client.GameStarted = true
+	}
 	log.Println("game started")
+	c.Lobby.IsStarted = true
 	go c.Lobby.StartGame(c)
 
 	network.BroadcastMessageToAllClients(c, &e) //sends an already existing start_game event to everyone

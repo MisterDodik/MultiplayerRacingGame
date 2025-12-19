@@ -77,7 +77,7 @@ func collides(c *network.Client, potentialX, potentialY float32) bool {
 
 	//collision with other players
 	for player := range c.Lobby.Clients {
-		if player == c {
+		if player == c || !player.GameStarted {
 			continue
 		}
 
