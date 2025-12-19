@@ -17,6 +17,7 @@ type GameServer struct {
 	Clients       ClientList
 	IsStarted     bool
 	ActivePlayers int
+	TimeStats     *TimeStats
 
 	Grid          [][]GridData
 	GridObstacles []IntPair
@@ -29,6 +30,12 @@ type GameServer struct {
 type GameSettings struct {
 	HunterAttackRange  float64
 	BarricadeSpawnRate time.Duration
+}
+type TimeStats struct {
+	StartTime       time.Time
+	EndTime         time.Time
+	Duration        time.Duration
+	LastPowerupTime time.Time
 }
 
 func (gs *GameServer) NewGameSettings(hunterAttackRange float64) *GameSettings {
@@ -156,12 +163,12 @@ func (m *Manager) NewGameServer(lobbyName string, gridCols, gridRows int, gridCe
 		IsStarted:     false,
 		Clients:       make(ClientList),
 		ActivePlayers: 0,
-
-		GridCols:     gridCols,
-		GridRows:     gridRows,
-		GridCellSize: gridCellSize,
-		GridOriginX:  gridOriginX,
-		GridOriginY:  gridOriginY,
+		TimeStats:     &TimeStats{},
+		GridCols:      gridCols,
+		GridRows:      gridRows,
+		GridCellSize:  gridCellSize,
+		GridOriginX:   gridOriginX,
+		GridOriginY:   gridOriginY,
 	}
 
 	//ovdje stavi mzd da se iz managera salju, al nek zasad ostanu hardcoded vrijednosti
@@ -201,14 +208,11 @@ func (gs *GameServer) initializators(c *Client) {
 
 }
 func (gs *GameServer) StartGame(c *Client) {
-	// for player, ok := range gs.Clients {
-	// 	if ok && player.GameStarted {
-	// 		gs.ActivePlayers++
-	// 	}
-	// }
 	log.Println("game loop started")
 	log.Println("number of players in the game: ", gs.ActivePlayers)
 	mainTicker := time.NewTicker(gameTickRate)
+
+	startTime := time.Now()
 
 	barricadeTicker := time.NewTicker(gs.Settings.BarricadeSpawnRate)
 	defer func() {
@@ -225,7 +229,6 @@ func (gs *GameServer) StartGame(c *Client) {
 			}
 
 			if len(gs.Clients) == 0 || gs.ActivePlayers == 0 { //ovdje mozes vjv staviti i 1, tj ako je samo jedan ostao onda je kraj tj on je pobijedio
-				log.Println("evo mene pozvao ovo za gasenje servera na neki nacin")
 				defer func() {
 					gs.IsStarted = false
 				}()
@@ -242,6 +245,7 @@ func (gs *GameServer) StartGame(c *Client) {
 				if c == nil {
 					return
 				}
+				endTime := time.Since(startTime)
 				evt := events.Event{
 					Type:    events.EndGame,
 					Payload: json.RawMessage{},
