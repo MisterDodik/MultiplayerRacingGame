@@ -29,5 +29,6 @@ var (
 	UpdatePositionFromServer = "update_position_from_server"
 	HunterAttack             = "hunter_attack"
 
-	EndGame = "end_game"
+	EndGameUpdateScore = "end_game"
+	UpdateScore        = "update_single_score"
 )
