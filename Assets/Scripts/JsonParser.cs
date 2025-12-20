@@ -37,6 +37,10 @@ public static class JsonParser
                 return (type, payloadToken.ToObject<Obstacle>());
             case MessageType.UpdateClientColor:
                 return (type, payloadToken.ToObject<UpdateColor>());
+            case MessageType.UpdateScore:
+                return (type, payloadToken.ToObject<ScoreUpdate>());
+            case MessageType.EndGameUpdateScore:
+                return (type, JsonConvert.DeserializeObject<List<EndGameScore>>(payloadToken.ToString()));
             default:
                 return (type, payloadToken.ToString());
         }
