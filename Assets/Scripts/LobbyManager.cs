@@ -98,9 +98,16 @@ public class LobbyManager : MonoBehaviour
             });
         }
     }
-    private void LoadLobbyHandler(object o)
+    public void LoadLobbyHandler(object o)
     {
         UnityMainThreadDispatcher.Instance().Enqueue(() => { 
+            playerLobbyManager.ReloadLobby();
+            obstacleManager.RemoveAllObstacles();
+        });
+    }
+    public void LoadLobbyHandler()
+    {
+        UnityMainThreadDispatcher.Instance().Enqueue(() => {
             playerLobbyManager.ReloadLobby();
             obstacleManager.RemoveAllObstacles();
         });
