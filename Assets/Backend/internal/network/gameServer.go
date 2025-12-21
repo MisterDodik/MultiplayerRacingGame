@@ -19,6 +19,7 @@ type GameServer struct {
 	Clients       ClientList
 	IsStarted     bool
 	ActivePlayers int
+	ToHunt        int
 	Hunters       int
 	TimeStats     *TimeStats
 
@@ -168,6 +169,7 @@ func (m *Manager) NewGameServer(lobbyName string, gridCols, gridRows int, gridCe
 		IsStarted:     false,
 		Clients:       make(ClientList),
 		ActivePlayers: 0,
+		ToHunt:        0,
 		Hunters:       0,
 		TimeStats:     &TimeStats{},
 		GridCols:      gridCols,
@@ -200,9 +202,6 @@ func (gs *GameServer) initializators(c *Client) {
 	counter := 0
 	for client := range gs.Clients {
 		client.SetHunter(hunterIndex == counter) //resets previous and sets new isHunter state
-		if hunterIndex == counter {
-			client.UpdateScore(50)
-		}
 		for {
 			i := rand.IntN(gs.GridCols)
 			j := rand.IntN(gs.GridRows)
@@ -231,8 +230,8 @@ func (gs *GameServer) StartGame(c *Client) {
 		LastPowerupTime: time.Now(),
 	}
 	barricadeTicker := time.NewTicker(gs.Settings.BarricadeSpawnRate)
-	gs.Hunters = 0
 	//scoreTicker := time.NewTicker(gs.Settings.ScoreTimer)
+	gs.Hunters = 0
 	defer func() {
 		mainTicker.Stop()
 		barricadeTicker.Stop()
@@ -240,6 +239,7 @@ func (gs *GameServer) StartGame(c *Client) {
 	}()
 
 	gs.initializators(c)
+	gs.ToHunt = gs.ActivePlayers - 1
 	for {
 		select {
 		case <-mainTicker.C:
@@ -262,8 +262,9 @@ func (gs *GameServer) StartGame(c *Client) {
 				}
 			}
 
-			if len(gs.Clients) == 0 || gs.ActivePlayers == 0 || gs.Hunters == gs.ActivePlayers { //ovdje mozes vjv staviti i 1, tj ako je samo jedan ostao onda je kraj tj on je pobijedio
-				log.Println("evo ovdje te pozivam ", len(gs.Clients), gs.ActivePlayers, gs.Hunters)
+			//if len(gs.Clients) <= 1 || gs.ActivePlayers <= 1 || gs.Hunters == gs.ActivePlayers { //ovdje mozes vjv staviti i 1, tj ako je samo jedan ostao onda je kraj tj on je pobijedio
+			if len(gs.Clients) <= 1 || gs.ActivePlayers <= 1 || gs.ToHunt == 0 || gs.Hunters == 0 { //ovdje mozes vjv staviti i 1, tj ako je samo jedan ostao onda je kraj tj on je pobijedio
+				log.Println(len(gs.Clients), gs.ActivePlayers, gs.ToHunt)
 				defer func() {
 					gs.IsStarted = false
 				}()

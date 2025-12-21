@@ -22,7 +22,7 @@ func HunterAttackHandler(e events.Event, c *network.Client) error {
 		if player == c || player.ClientGameData.IsHunter {
 			continue
 		}
-		log.Println(c.Lobby.ActivePlayers, c.Lobby.Hunters)
+		log.Println(c.Lobby.ActivePlayers, c.Lobby.ToHunt)
 		if calculateDistance(c, player.ClientGameData.PosX, player.ClientGameData.PosY) < c.Lobby.Settings.HunterAttackRange {
 			c.UpdateScore(100)
 			player.SetHunter(true)

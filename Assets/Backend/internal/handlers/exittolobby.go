@@ -17,6 +17,12 @@ func ExitToLobbyHandler(e events.Event, c *network.Client) error {
 	log.Println(c.Lobby.ActivePlayers, len(c.Lobby.Clients))
 	c.GameStarted = false
 	c.Lobby.ActivePlayers--
+
+	if !c.ClientGameData.IsHunter {
+		c.Lobby.ToHunt--
+	} else {
+		c.Lobby.Hunters--
+	}
 	evt := &events.Event{
 		Type:    events.ExitToLobby,
 		Payload: []byte("null"),

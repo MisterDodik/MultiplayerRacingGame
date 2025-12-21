@@ -52,6 +52,7 @@ func (c *Client) SetHunter(isHunter bool) {
 		),
 	}
 	if isHunter {
+		c.Lobby.ToHunt--
 		c.Lobby.Hunters++
 	}
 	BroadcastMessageToAllClients(c, evt)
