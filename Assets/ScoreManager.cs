@@ -63,7 +63,7 @@ public class ScoreManager : MonoBehaviour
         }
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-            gameDurationTMPro.text = "Game duration: " + scores[0].gameDuration;
+            gameDurationTMPro.text = "Game duration: " + scores[0].gameDuration + "s";
             leaderBoardTMPro.text = "";
             int counter = 1;
             foreach(EndGameScore score in scores)
