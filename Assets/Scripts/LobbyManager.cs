@@ -14,9 +14,11 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private TMP_InputField seedInputTMPro;
     [SerializeField] private TMP_InputField usernameInputTMPro;
     [SerializeField] private TextMeshProUGUI lobbyNameTMPro;
+    [SerializeField] private Button joinLobbyBtn;
+
+    [SerializeField] private ChatSystem chatManager;
     [SerializeField] private PlayerLobby playerLobbyManager;
     [SerializeField] private ObstacleManager obstacleManager;
-    [SerializeField] private Button joinLobbyBtn;
     private void Start()
     {
         seedPanel.SetActive(true);
@@ -60,6 +62,7 @@ public class LobbyManager : MonoBehaviour
         print("connected to lobby");
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
+            chatManager.ClearChat();
             lobbyNameTMPro.text = data.ToString();
             seedPanel.SetActive(false);
             lobbyPanel.SetActive(true);
@@ -78,6 +81,7 @@ public class LobbyManager : MonoBehaviour
     {
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
+            chatManager.ClearChat();
             obstacleManager.RemoveAllObstacles();
             playerLobbyManager.ClearOnLobbyExit();
             seedPanel.SetActive(true);

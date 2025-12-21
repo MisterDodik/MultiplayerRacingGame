@@ -60,7 +60,10 @@ public class ChatSystem : MonoBehaviour
         scrollRect.content.sizeDelta = new Vector2(scrollRect.content.sizeDelta.x, chat.preferredHeight + 70);
         scrollRect.verticalNormalizedPosition = 0;
     }
-
+    public void ClearChat()
+    {
+        chat.text = "";
+    }
     [System.Serializable]
     public class ChatMessagePayload
     {
