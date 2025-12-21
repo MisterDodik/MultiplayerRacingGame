@@ -1766,9 +1766,10 @@ MonoBehaviour:
   seedInputTMPro: {fileID: 283598459}
   usernameInputTMPro: {fileID: 1364425067}
   lobbyNameTMPro: {fileID: 1128000137}
+  joinLobbyBtn: {fileID: 363210174}
+  chatManager: {fileID: 609563147}
   playerLobbyManager: {fileID: 1001428301}
   obstacleManager: {fileID: 609563151}
-  joinLobbyBtn: {fileID: 363210174}
 --- !u!114 &609563150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2313,7 +2314,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -50}
+  m_AnchoredPosition: {x: 170, y: -50}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &704610961
@@ -2758,6 +2759,8 @@ MonoBehaviour:
   gameElements: {fileID: 1128098214}
   playerPrefab: {fileID: 6401187584807655712, guid: c5ec271fe7de55e43934708b3f01bc09, type: 3}
   positionOrigin: {x: 0, y: 2}
+  defaultUsernameFontColor: {r: 0, g: 0, b: 0, a: 1}
+  ownerPlayerFontColor: {r: 0.90588236, g: 0.87058824, b: 0.015686275, a: 1}
   scoreManager: {fileID: 1001428303}
   obstacleManager: {fileID: 609563151}
   mainCamera: {fileID: 519420032}
@@ -4628,10 +4631,10 @@ RectTransform:
   - {fileID: 1842350069}
   m_Father: {fileID: 2001563885}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 416.55, y: -0.0000038146973}
-  m_SizeDelta: {x: 833.1, y: 964.7}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 416.55, y: 0}
+  m_SizeDelta: {x: 833.1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1791263024
 MonoBehaviour:
