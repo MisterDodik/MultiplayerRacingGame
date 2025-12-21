@@ -67,7 +67,7 @@ func UpdateLobby(c *network.Client, action string) error {
 		evt := &events.Event{
 			Type: action,
 			Payload: json.RawMessage(
-				[]byte(fmt.Sprintf(`{"username":"%s","id":"%s", "colorHex":"%s", "gameStarted":"%v"}`, other.Username, other.Id, other.Color, other.GameStarted)),
+				[]byte(fmt.Sprintf(`{"username":"%s","id":"%s", "colorHex":"%s", "gameStarted":"%v"}`, other.Username, other.Id, other.Color, c.GameStarted)),
 			),
 		}
 		network.BroadcastMessageToSingleClient(c, evt)
