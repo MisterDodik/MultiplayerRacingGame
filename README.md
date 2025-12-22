@@ -8,7 +8,6 @@ Real-time multiplayer game prototype built with:
 - WebSocket-based real-time communication
 - Client-server architecture
 - Player state synchronization
-- Infected / tag-style gameplay logic
 - Supports 2–8 players per lobby
 
 ### How to Run
