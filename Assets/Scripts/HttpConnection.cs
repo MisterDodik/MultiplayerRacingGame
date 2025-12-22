@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using PimDeWitte.UnityMainThreadDispatcher;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,10 @@ public static class HttpConnection
         }
         catch
         {
+            //UnityMainThreadDispatcher.Instance().Enqueue(() =>
+            //{
+            //    EventSystem.Emit(MessageType.InfoEvent, new InfoData { message = response });
+            //});
             T obj = default(T);
             response = JsonUtility.ToJson(obj);
             return JsonUtility.FromJson<T>(response);

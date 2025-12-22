@@ -32,6 +32,7 @@ public class LobbyManager : MonoBehaviour
         if (seedInput.Length < 1)
         {
             print("seed cannot be empty");
+            EventSystem.Emit(MessageType.InfoEvent, new InfoData { message = "Seed cannot be empty!"});
             return;
         }
 
@@ -40,6 +41,7 @@ public class LobbyManager : MonoBehaviour
 
         if (usernameInput.Length < 1)
         {
+            EventSystem.Emit(MessageType.InfoEvent, new InfoData { message = "Username cannot be empty!" });
             print("username cannot be empty");
             return;
         }
@@ -52,6 +54,7 @@ public class LobbyManager : MonoBehaviour
         });
         if (result == null)
         {
+            EventSystem.Emit(MessageType.InfoEvent, new InfoData { message = "Error!"});
             button.enabled = true;
             return;
         } 

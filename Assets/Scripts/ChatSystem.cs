@@ -42,6 +42,7 @@ public class ChatSystem : MonoBehaviour
         if (message == "")
         {
             Debug.LogError("cannot send empty message");
+            EventSystem.Emit(MessageType.InfoEvent, new InfoData { message = "Cannot send empty message!" });
             return;
         }
 
