@@ -1,4 +1,4 @@
-## Multiplayer Tag Game (Prototype)
+## Multiplayer Tag Game 
 
 Real-time multiplayer game prototype built with:
 - Golang WebSocket server
