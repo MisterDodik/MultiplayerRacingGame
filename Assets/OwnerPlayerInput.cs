@@ -163,7 +163,7 @@ public class OwnerPlayerInput : PlayerGeneral
         if (Vector2.Distance(stateBuffer[bufferTick].pos, serverPos) < 0.01f)
             return;
         targetPosition = serverPos;
-        transform.localPosition = serverPos;
+        //transform.localPosition = serverPos;
         InputState correctedState = stateBuffer[bufferTick];
         correctedState.pos = serverPos;
         stateBuffer[bufferTick] = correctedState;
