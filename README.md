@@ -7,7 +7,7 @@ Real-time multiplayer game prototype built with:
 ### Features
 - WebSocket-based real-time communication
 - Client-server architecture
-- Player state synchronization
+- Client side prediction/Server reconciliation
 - Supports 2–8 players per lobby
 
 ### How to Run
