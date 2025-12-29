@@ -6,13 +6,30 @@ Real-time multiplayer game prototype built with:
 
 ### Features
 - WebSocket-based real-time communication
-- Client-server architecture
 - Client side prediction/Server reconciliation
 - Supports 2–8 players per lobby
 
-### How to Run
-1. Start the Golang server:  go run ./...
-2. Launch the Unity client or game build
+---
+
+## Download Game Client
+
+Download the latest Unity game build from the [Releases](https://github.com/MisterDodik/MultiplayerTagGame/releases) page.
+
+## Run Backend Server (Docker)
+
+### Requirements
+- [Docker](https://www.docker.com/)
+
+  
+Build Docker image:
+
+```bash
+docker build -t multiplayer-server .
+docker run -p 8080:8080 multiplayer-server
+```
+
+### How to Play
+1. Launch the Unity client
 3. Enter a username and lobby seed
 4. Click **Join Lobby**
 
