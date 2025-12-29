@@ -41,3 +41,7 @@ docker run -p 8080:8080 multiplayer-server
 Players start as either infected or non-infected.
 - Non-infected players' goal is to survive as long as possible
 - Infected players have to chase and infect other players
+
+### 🎬 Demo / GIF
+
+![Gameplay Demo](./demo.gif)
